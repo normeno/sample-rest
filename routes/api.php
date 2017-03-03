@@ -2,22 +2,19 @@
 
 use Illuminate\Http\Request;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
+/**
+ * Get a file and return json
+ * @return array
+ */
 function getJsonFile() {
     $file = Storage::get('public/db.json');
     return (array) json_decode($file);
 }
 
+/**
+ * Get a json and return array
+ * @return array
+ */
 function getArrayFile() {
     $json = getJsonFile();
     return $json;
@@ -28,10 +25,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+/**
+ * Return all records
+ */
 Route::get('/movies', function () {
     return response()->json(getJsonFile());
 });
 
+/**
+ * Return one record
+ */
 Route::get('/movies/{id}', function (Request $request) {
     $movies = getArrayFile();
 
@@ -53,6 +56,9 @@ Route::get('/movies/{id}', function (Request $request) {
     return [];
 });
 
+/**
+ * Edit a record (simulation)
+ */
 Route::put('/movies/{id}', function (Request $request, $id) {
     $movies = getArrayFile();
 
@@ -79,6 +85,9 @@ Route::put('/movies/{id}', function (Request $request, $id) {
     return response()->json([]);
 });
 
+/**
+ * Create a record (simulation)
+ */
 Route::post('/movies/create', function (Request $request) {
     $response = [
         'id' => $request->id,
@@ -93,6 +102,10 @@ Route::post('/movies/create', function (Request $request) {
     return response()->json($response);
 });
 
+
+/**
+ * Delete a record (simulation)
+ */
 Route::delete('/movies/{id}', function (Request $request, $id) {
     $movies = getArrayFile();
 
@@ -119,4 +132,35 @@ Route::delete('/movies/{id}', function (Request $request, $id) {
     }
 
     return response()->json([]);
+});
+
+/**
+ * Simulate a login
+ */
+Route::post('/users/login', function (Request $request) {
+
+    $faker = Faker\Factory::create();
+
+    if (!$request->password) {
+        return response()->json(['error' => 'Password is required']);
+    }
+
+    if ($request->username || $request->email) {
+        $response = [
+            'status' => 1,
+            'user' => [
+                'username' => $request->username ? $request->username : 'randomUsername',
+                'email' => $request->email ? $request->email : 'randomEmail',
+                'firstName' => $faker->firstName(),
+                'lastName' => $faker->lastName,
+                'avatar' => 'http://lorempixel.com/100/100/people/9/'
+            ]
+        ];
+    } else {
+        $response = ['error' => 'Username or Email is required'];
+    }
+
+
+
+    return response()->json($response);
 });
