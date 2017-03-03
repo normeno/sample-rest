@@ -10,10 +10,26 @@ DEMO: [Heroku](https://shrouded-savannah-22718.herokuapp.com/api/movies)
 
 ## Routes
 
-| METHOD | ROUTE|
-|:--------:|:------|
-|GET     |/api/movies|
-|POST    |/api/movies/create|
-|GET     |/api/movies/{id}|
-|PUT     |/api/movies/{id}|
-|DELETE  |/api/movies/{id}|
+| METHOD | ROUTE|PARAMS|
+|:--------:|:---|:-----|
+|GET     |/api/movies||
+|POST    |/api/movies/create|id, title, image, rating, releaseYear, genre|
+|GET     |/api/movies/{id}|id|
+|PUT     |/api/movies/{id}|id, title, image, rating, releaseYear, genre|
+|DELETE  |/api/movies/{id}|id|
+|POST    |/api/users/login|{username or email}, password|
+
+## Usage
+
+Clone repository
+
+```shell
+git clone https://github.com/normeno/sample-rest.git
+```
+
+Enter the repository and run test server
+
+```shell
+cd sample-rest
+php -S localhost:8000 -t public
+```
